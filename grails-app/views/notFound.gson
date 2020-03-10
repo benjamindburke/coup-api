@@ -1,6 +1,6 @@
 response.status 404
 
-json {
+json.data {
 	message "Not Found"
 	error 404
 }

@@ -1,0 +1,11 @@
+import coup.api.Game
+
+model {
+    Game game
+}
+
+json.data {
+	id(game.id)
+	gameId(game.gameId)
+	dateCreated(game.dateCreated)
+}

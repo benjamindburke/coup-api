@@ -64,16 +64,16 @@ grails:
 
 ---
 hibernate:
+    dialect: net.kaleidos.hibernate.PostgresqlExtensionsDialect
     cache:
         queries: false
         use_second_level_cache: false
         use_query_cache: false
+
 dataSource:
     pooled: true
     jmxExport: true
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
+    driverClassName: org.postgresql.Driver
 
 environments:
     development:
