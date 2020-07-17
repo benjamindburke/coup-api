@@ -1,10 +1,9 @@
-package coup.api
+package coup.api.game
 
-import coup.api.Game
-
-import grails.rest.*
-import grails.converters.*
-
+/**
+ * Game domain class controller for the Coup game.
+ * Created on 07/16/2020 by @benjamindburke. Last modified 07/17/2020 by @benjamindburke.
+ */
 class GameController {
 	static responseFormats = [ 'json' ]
     static scaffold = true
@@ -20,7 +19,7 @@ class GameController {
     def create() {
         try {
             Game game = gameService.createGame()
-            render( template: "/game/game", model: [ game: game ])
+            render(template: "/game/game", model: [ game: game ])
         } catch (e) {
             e.printStackTrace()
             render(view: "/error", model: [ error: e ])

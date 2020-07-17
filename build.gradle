@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    provided "org.postgresql:postgresql:9.4.1211.jre7"
+    provided "org.postgresql:postgresql:42.2.14"
     compile "org.grails.plugins:postgresql-extensions:4.6.2"
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"

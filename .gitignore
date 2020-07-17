@@ -3,6 +3,7 @@ Thumbs.db
 .gradle
 build/
 out/
+lib/
 .idea
 *.iml
 *.ipr
@@ -10,5 +11,5 @@ out/
 .project
 .settings
 .classpath
-coup-app/
+webapp/
 grails-app/conf/application.yml

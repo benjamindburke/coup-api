@@ -1,4 +1,4 @@
-import coup.api.Game
+import coup.api.game.Game
 
 model {
     Game game
