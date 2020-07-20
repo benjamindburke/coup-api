@@ -1,11 +1,12 @@
 package coup.api.game
 
+import coup.api.deck.Deck
 import coup.api.player.Player
 import grails.gorm.transactions.NotTransactional
 
 /**
  * Game class for the Coup game.
- * Created on 07/16/2020 by @benjamindburke. Last modified 07/17/2020 by @benjamindburke.
+ * Created on 07/16/2020 by @benjamindburke. Last modified 07/20/2020 by @benjamindburke.
  */
 class Game {
 
@@ -13,8 +14,8 @@ class Game {
  *      Attributes                                      *
  ********************************************************/
 
-    /** Unique UUID identifier in the database. */
-    String id
+    /** Unique BigInt identifier in the database. */
+    BigInteger id
 
     /** Short, 5-character Game ID used to connect to the game. */
     String gameId
@@ -34,23 +35,16 @@ class Game {
      */
     GameStatus status
 
-    /** The winner of the game. Null until game completes. */
-    Player winner
-
 /********************************************************
  *      GORM Relationships & Constraints                *
  ********************************************************/
 
     /** Database & data binding constraints. */
     static constraints = {
-        id generator: "uuid"
+        id generator: "sequence", params: [sequence: "game_id_seq"]
         gameId blank: false, bindable: true, unique: true
-        dateCreated blank: false, bindable: true, nullable: false
-        dateStarted blank: true, bindable: false, nullable: true
-        dateEnded blank: true, bindable: false, nullable: true
-        status blank: false, bindable: false, nullable: false
-        winner blank: true, bindable: false, nullable: true
-        players blank: false, bindable: false, nullable: false, size: 1..6
+        dateStarted blank: false, bindable: true, nullable: true
+        dateEnded blank: false, bindable: true, nullable: true
     }
 
     /** Domain objects that own the Game class. Uncomment to use. */
@@ -60,12 +54,12 @@ class Game {
 
     /** One-to-many relationships between Game objects and other domain classes. */
     static hasMany = [
-        players: Player
+        players: Player,
     ]
 
     /** One-to-one relationships between Game objects and other domain classes. */
     static hasOne = [
-        winner: Player,
+        deck: Deck,
     ]
 
     /** Custom attribute mapping for Game attributes if necessitated by other domain objects. Uncomment to use. */
@@ -90,7 +84,7 @@ class Game {
      * @return String
      */
     String getDateStartedStr() {
-        new Date(dateStarted).toString()
+        dateStarted ? new Date(dateStarted).toString() : null
     }
 
     /**
@@ -98,7 +92,7 @@ class Game {
      * @return String
      */
     String getDateEndedStr() {
-        new Date(dateEnded).toString()
+        dateEnded ? new Date(dateEnded).toString() : null
     }
 
 /********************************************************
@@ -112,8 +106,7 @@ class Game {
     @NotTransactional
     Boolean isInProgress() {
 
-        (status == GameStatus.IN_PROGRESS)
-            && (winner == null)
+        status == GameStatus.IN_PROGRESS && winner == null
     }
 
 }

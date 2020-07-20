@@ -5,7 +5,7 @@ import grails.gorm.transactions.NotTransactional
 
 /**
  * Player class for the Coup game.
- * Created on 07/16/2020 by @benjamindburke. Last modified 07/17/2020 by @benjamindburke.
+ * Created on 07/16/2020 by @benjamindburke. Last modified 07/20/2020 by @benjamindburke.
  */
 class Player {
 
@@ -31,11 +31,14 @@ class Player {
      */
     PlayerStatus status
 
+    /** Whether the player is the winner. */
+    Boolean winner
+
     /** The player's first card. */
-    String cardID1
+    BigInteger cardID1
 
     /** The player's second card. */
-    String cardID2
+    BigInteger cardID2
 
 /********************************************************
  *      GORM Relationships & Constraints                *
@@ -44,12 +47,12 @@ class Player {
     /** Database & data binding constraints. */
     static constraints = {
         playerId blank: false, bindable: true, nullable: false, size: 1..100
-        turnOrder blank: false, bindable: false, nullable: false, inList: [1, 2, 3, 4, 5, 6]
+        turnOrder blank: false, bindable: false, nullable: false, inList: 1..6
         nickname blank: false, bindable: true, nullable: false, size: 1..40
         lastActive blank: true, bindable: false, nullable: false
         status blank: false, bindable: false, nullable: false
-        cardID1 bindable: false, nullable: true
-        cardID2 bindable: false, nullable: true
+        cardID1 blank: false, bindable: false, nullable: true
+        cardID2 blank: false, bindable: false, nullable: true
     }
 
     /** Domain objects that own the Player class. */
@@ -76,19 +79,16 @@ class Player {
  *      Accessor functions                              *
  ********************************************************/
 
-
-
-/********************************************************
- *      Convenience functions                           *
- ********************************************************/
-
     /**
      * Check if the player is still active.
      * @return Boolean
      */
     @NotTransactional
-    Boolean isActive() {
-        isAlive() && (lastActive >= System.currentTimeMillis() - 180000)    // 3min. in ms
+    Boolean getIsActive() {
+
+        // The player is active if they are still alive and the
+        //     last received action was less than 5 minutes ago
+        isAlive && (lastActive >= System.currentTimeMillis() - 300000)  // 5 min. in ms
     }
 
     /**
@@ -96,9 +96,15 @@ class Player {
      * @return Boolean
      */
     @NotTransactional
-    Boolean isAlive() {
+    Boolean getIsAlive() {
 
         status == PlayerStatus.ALIVE
     }
+
+/********************************************************
+ *      Convenience functions                           *
+ ********************************************************/
+
+
 
 }

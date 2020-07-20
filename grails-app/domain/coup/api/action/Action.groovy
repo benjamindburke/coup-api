@@ -1,11 +1,12 @@
-package coup.api.turn
+package coup.api.action
 
+import coup.api.game.Game
 import coup.api.player.Player
 import grails.gorm.transactions.NotTransactional
 
 /**
  * Action class for the Coup game.
- * Created on 07/17/2020 by @benjamindburke. Last modified 07/17/2020 by @benjamindburke.
+ * Created on 07/17/2020 by @benjamindburke. Last modified 07/19/2020 by @benjamindburke.
  */
 class Action {
 
@@ -13,8 +14,8 @@ class Action {
  *      Attributes                                      *
  ********************************************************/
 
-    /** Unique UUID identifier in the database. */
-    String id
+    /** Unique BigInt identifier in the database. */
+    BigInteger id
 
     /** An action that this action is responding to. */
     Action responseTo
@@ -28,19 +29,30 @@ class Action {
     /** Whether the action has succeeded. */
     Boolean successful
 
+    /** The source of the action. */
+    Player source
+
+    /** The target of the action. */
+    Player target
+
 /********************************************************
  *      GORM Relationships & Constraints                *
  ********************************************************/
 
     /** Database & data binding constraints. */
     static constraints = {
-        id generator: "uuid"
+        id generator: "sequence", params: [sequence: "action_id_seq"]
+        type blank: false, bindable: true, nullable: false
+        cost blank: false, bindable: true, nullable: false
+        successful blank: false, bindable: false, nullable: false
+        source blank: false, bindable: true, nullable: false
+        target blank: false, bindable: true, nullable: false
         responseTo blank: false, bindable: true, nullable: true
     }
 
     /** Domain objects that own the Action class. */
     static belongsTo = [
-        turn: Turn
+        game: Game
     ]
 
     /** One-to-many relationships between Action objects and other domain classes. Uncomment to use. */
@@ -48,17 +60,15 @@ class Action {
     //
     // ]
 
-    /** One-to-one relationships between Action objects and other domain classes. */
-    static hasOne = [
-        source: Player,
-        target: Player,
-    ]
+    /** One-to-one relationships between Action objects and other domain classes. Uncomment to use. */
+    // static hasOne = [
+    //
+    // ]
 
     /** Custom attribute mapping for Action attributes if necessitated by other domain objects. Uncomment to use. */
     // static mapping = {
     //
     // }
-
 
 /********************************************************
  *      Accessor functions                              *
@@ -69,7 +79,7 @@ class Action {
      * @return Action
      */
     @NotTransactional
-    Action getParent() {
+    Action getResponseTo() {
         responseTo ?: null
     }
 

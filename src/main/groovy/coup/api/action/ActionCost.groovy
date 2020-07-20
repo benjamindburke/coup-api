@@ -1,9 +1,12 @@
-package coup.api.turn
+package coup.api.action
+
+import groovy.transform.CompileStatic
 
 /**
  * Cost constants for the Action domain object.
  * Created on 07/17/2020 by @benjamindburke. Last modified 07/17/2020 by @benjamindburke.
  */
+@CompileStatic
 enum ActionCost {
 
     AMBASSADOR(0),

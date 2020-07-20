@@ -8,4 +8,8 @@ json.data {
 	id(game.id)
 	gameId(game.gameId)
 	dateCreated(game.dateCreated)
+	dateStarted(game.dateStarted ?: "")
+	dateEnded(game.dateEnded ?: "")
+	status(game.status.toString())
+	players(game.players ?: [])
 }

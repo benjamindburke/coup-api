@@ -1,9 +1,9 @@
-package coup.api.turn
+package coup.api.deck
 
-import grails.testing.gorm.DomainUnitTest
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class TurnSpec extends Specification implements DomainUnitTest<Turn> {
+class DeckServiceSpec extends Specification implements ServiceUnitTest<DeckService>{
 
     def setup() {
     }

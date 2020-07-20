@@ -4,7 +4,7 @@ import grails.gorm.transactions.NotTransactional
 
 /**
  * Card class for the Coup game.
- * Created on 07/17/2020 by @benjamindburke. Last modified 07/17/2020 by @benjamindburke.
+ * Created on 07/17/2020 by @benjamindburke. Last modified 07/20/2020 by @benjamindburke.
  */
 class Card {
 
@@ -12,8 +12,8 @@ class Card {
  *      Attributes                                      *
  ********************************************************/
 
-    /** Unique UUID identifier in the database. */
-    String id
+    /** Unique BigInt identifier in the database. */
+    BigInteger id
 
     /**
      * The status of the card.
@@ -27,13 +27,17 @@ class Card {
      */
     CardType type
 
+    /** The position of the card in the deck. */
+    Integer cardOrder
+
 /********************************************************
  *      GORM Relationships & Constraints                *
  ********************************************************/
 
     /** Database & data binding constraints. */
     static constraints = {
-        id generator: "uuid"
+        id generator: "sequence", params: [sequence: "card_id_seq"]
+        cardOrder inList: 1..15
     }
 
     /** Domain objects that own the Card class. */
@@ -60,19 +64,28 @@ class Card {
  *      Accessor functions                              *
  ********************************************************/
 
-
-
-/********************************************************
- *      Convenience functions                           *
- ********************************************************/
-
     /**
      * Determine whether the card is in the deck.
      * @return Boolean
      */
     @NotTransactional
-    Boolean isInDeck() {
+    Boolean getIsInDeck() {
         status == CardStatus.DECK
     }
+
+    /**
+     * Determine whether the card is still in play.
+     * @return Boolean
+     */
+    @NotTransactional
+    Boolean getIsInPlay() {
+        status != CardStatus.KILLED
+    }
+
+/********************************************************
+ *      Convenience functions                           *
+ ********************************************************/
+
+
 
 }
