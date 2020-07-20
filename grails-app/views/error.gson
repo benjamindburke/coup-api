@@ -1,11 +1,10 @@
-response.status 500
-
 model {
     Exception e
 }
 
+response.status 500
 json.data {
-    message "Internal server error"
-    error e
-    status 500
+    message("Internal server error")
+    error(e.message)
+    status(500)
 }

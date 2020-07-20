@@ -2,18 +2,20 @@ package coup.api.game
 
 /**
  * Game domain class controller for the Coup game.
- * Created on 07/16/2020 by @benjamindburke. Last modified 07/18/2020 by @benjamindburke.
+ * Created on 07/16/2020 by @benjamindburke. Last modified 07/20/2020 by @benjamindburke.
  */
 class GameController {
-	static responseFormats = [ 'json' ]
+
+	static responseFormats = [ "json" ]
     static scaffold = true
 
     def gameService
 	
     def index() {
-        // TODO : render collection of games? Do I even need to?
-        // Game.list()
-        // render(template: "/game/game", colletion: games, var: "game")
+        // Essentially a no-op.
+        // Redirect to show() with no gameId
+        // Returns a server error
+        show()
     }
 
     def create() {
@@ -21,9 +23,22 @@ class GameController {
             Game game = gameService.createGame()
 
             render(template: "/game/game", model: [ game: game ])
-        } catch (e) {
-            e.printStackTrace()
-            render(view: "/error", model: [ error: e ])
+        } catch (error) {
+            error.printStackTrace()
+            render(view: "/error", model: [ e: error ])
         }
+    }
+
+    def show() {
+
+        String gameId = params.get("gameId") ?: null
+        Game thisGame = Game.findByGameId(gameId) ?: null
+
+        if (thisGame) {
+            render(template: "/game/game", model: [ game: thisGame ])
+        } else {
+            render(view: "/error", model: [ e: new Exception("Game does not exist") ])
+        }
+
     }
 }

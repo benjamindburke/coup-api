@@ -4,6 +4,7 @@ model {
     Game game
 }
 
+response.status 200
 json.data {
 	id(game.id)
 	gameId(game.gameId)
